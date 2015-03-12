@@ -1,12 +1,12 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Easyflow/Plugins/ClothState.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fantasy Skybox FREE/Readme/Readme.txt">
     <Files>
       <File FileName="Assets/CubePlayerController.cs" Line="23" Column="109" />
       <File FileName="Assets/KeyboardInputInterface.cs" Line="1" Column="1" />
       <File FileName="Assets/WaterPhsicEffect.cs" Line="1" Column="1" />
       <File FileName="Assets/CameraMoveController.cs" Line="1" Column="1" />
-      <File FileName="Assets/Easyflow/Plugins/ClothState.cs" Line="11" Column="33" />
+      <File FileName="Assets/Fantasy Skybox FREE/Readme/Readme.txt" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
