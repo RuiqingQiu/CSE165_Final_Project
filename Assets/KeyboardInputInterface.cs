@@ -7,7 +7,8 @@ public class KeyboardInputInterface : MonoBehaviour {
 	private bool isWdown = false;
 	private bool isAdown = false;
 	private bool isDdown = false;
-
+	private bool isSdown = false;
+	
 	// Use this for initialization
 	void Start () {
 		ctrl = gameObject.GetComponent<CubePlayerController> ();
@@ -25,6 +26,9 @@ public class KeyboardInputInterface : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.D)) {
 			isDdown = true;
 		}
+		if (Input.GetKeyDown (KeyCode.S)) {
+			isSdown = true;
+		}
 		if (Input.GetKeyUp (KeyCode.W)) {
 			isWdown = false;
 		}
@@ -34,7 +38,9 @@ public class KeyboardInputInterface : MonoBehaviour {
 		if (Input.GetKeyUp (KeyCode.D)) {
 			isDdown = false;
 		}
-
+		if (Input.GetKeyUp (KeyCode.S)) {
+			isSdown = false;
+		}
 		UpdatePlayerCtrl ();
 	}
 
@@ -48,6 +54,9 @@ public class KeyboardInputInterface : MonoBehaviour {
 		}
 		if (isDdown) {
 			ctrl.Rotate(-1);
+		}
+		if (isSdown) {
+			ctrl.Move (-ctrl.transform.forward);
 		}
 
 	}

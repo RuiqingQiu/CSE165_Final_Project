@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CubePlayerController : MonoBehaviour {
-
-
+	public List<IItem> itemlist = new List<IItem>();
+	public SkeletalHand left_hand;
 	Rigidbody phisicalBody;
 	// Use this for initialization
 	void Start () {
@@ -12,10 +13,13 @@ public class CubePlayerController : MonoBehaviour {
 		if (!phisicalBody) {
 			Debug.LogError("phisical body of cube player is missing!");
 		}
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		
+		
 		//add resist force
 		//phisicalBody.AddForce (new Vector3(0,1,0));
 
@@ -46,5 +50,11 @@ public class CubePlayerController : MonoBehaviour {
 		phisicalBody.AddTorque (transform.up * -value);
 		return true;
 	}
-
+	
+	public bool Pick(IItem item)
+	{
+		Debug.Log("pick something");
+		itemlist.Add(item);
+		return true;
+	}
 }
