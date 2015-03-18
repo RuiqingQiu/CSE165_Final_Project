@@ -16,37 +16,42 @@ public class SkeletalHand : HandModel {
   public GameObject forearm;
   public GameObject wristJoint;
   private GameObject player;
+  protected Frame frame;
+  public Leap.Controller controller;
+  public LeapListener listener;
+
   void Start() {
-    // Ignore collisions with self.
-    Leap.Utils.IgnoreCollisions(gameObject, gameObject);
-    player = GameObject.Find("Player") as GameObject;
+	// Ignore collisions with self.
+	Leap.Utils.IgnoreCollisions(gameObject, gameObject);
+	frame = new Frame ();
+	listener = new LeapListener ();
+	controller = new Leap.Controller(listener); // register the LeapListener
+	player = GameObject.Find("Player") as GameObject;
   }
 
   public override void InitHand() {
     SetPositions();
   }
 
+
   public override void UpdateHand() {
     SetPositions();
 		
 	//Debug.Log (left_hand.GetPalmNormal());
 	//Debug.Log (left_hand.GetPalmDirection());
-	
-	if(GetLeapHand().IsLeft){
-		Debug.Log ("left");
-		if(player){
-			if (GetPalmNormal().y > 0) {
-				player.GetComponent<Rigidbody>().AddForce (player.transform.forward*20);
-				Debug.Log ("moving forward");
-			}
-			if (GetPalmDirection().x > 0.7f) {
-				player.GetComponent<Rigidbody>().AddTorque (player.transform.up * 1);
-				Debug.Log ("turning right");		
-			}
-			else if (GetPalmDirection().x < -0.5f) {
-				player.GetComponent<Rigidbody>().AddTorque (player.transform.up * -1);
-				Debug.Log ("turning left");	
-			}
+	Debug.Log ("left");
+	if(player){
+		if (GetPalmNormal().y > 0) {
+			player.GetComponent<Rigidbody>().AddForce (player.transform.forward*20);
+			Debug.Log ("moving forward");
+		}
+		if (GetPalmDirection().x > 0.7f) {
+			player.GetComponent<Rigidbody>().AddTorque (player.transform.up * 1);
+			Debug.Log ("turning right");		
+		}
+		else if (GetPalmDirection().x < -0.5f) {
+			player.GetComponent<Rigidbody>().AddTorque (player.transform.up * -1);
+			Debug.Log ("turning left");	
 		}
 	}
 	else if(GetLeapHand().IsRight){
@@ -61,8 +66,7 @@ public class SkeletalHand : HandModel {
 			}
 		}
 	}
-		
-  }
+ }
 
   protected Vector3 GetPalmCenter() {
 	//Debug.Log (GetPalmDirection());	
@@ -92,6 +96,50 @@ public class SkeletalHand : HandModel {
       forearm.transform.rotation = GetArmRotation();
     }
   }
+
+
+	// inner class LeapListener inheritances Listener
+	public class LeapListener: Listener{
+		// public constructor
+		public LeapListener(){}
+
+		public override void onConnect(Controller controller) {
+			Debug.Log ("on connected");
+			controller.EnableGesture(Gesture.GestureType.TYPECIRCLE,true);
+			controller.EnableGesture(Gesture.GestureType.TYPE_KEY_TAP,true);
+			controller.EnableGesture(Gesture.GestureType.TYPE_SCREEN_TAP,true);
+			controller.EnableGesture(Gesture.GestureType.TYPE_SWIPE,true);
+		}
+
+		public override void OnFrame (Controller controller)
+		{
+			Frame frame = controller.Frame ();
+			GestureList gestures = frame.Gestures();
+			for (int i = 0; i < gestures.Count; i++)
+			{
+				Gesture gesture = gestures[0];
+				switch(gesture.Type){
+				case Gesture.GestureType.TYPECIRCLE:
+					Debug.Log("Circle");
+					break;
+				case Gesture.GestureType.TYPE_KEY_TAP:
+					Debug.Log("key tap");
+					break;
+				case Gesture.GestureType.TYPE_SCREEN_TAP:
+					Debug.Log("screen tap");
+					break;
+				case Gesture.GestureType.TYPE_SWIPE:
+					Debug.Log("swipe");
+					break;
+				default:
+					Debug.Log("Bad gesture type");
+					break;
+				}
+			}
+		}
+	}// end of LeapListener class
 }
+
+
 
 
