@@ -1,4 +1,4 @@
-﻿/******************************************************************************\
+/******************************************************************************\
 * Copyright (C) Leap Motion, Inc. 2011-2014.                                   *
 * Leap Motion proprietary. Licensed under Apache 2.0                           *
 * Available at http://www.apache.org/licenses/LICENSE-2.0.html                 *
@@ -9,6 +9,9 @@ using System.Collections;
 using Leap;
 
 // The model for our skeletal hand made out of various polyhedra.
+using UnityEngine.UI;
+
+
 public class SkeletalHand : HandModel {
 
   protected const float PALM_CENTER_OFFSET = 0.0150f;	
@@ -19,14 +22,23 @@ public class SkeletalHand : HandModel {
   protected Frame frame;
   public Leap.Controller controller;
   public LeapListener listener;
-
+  public Button scale;
+  public Button jump;
+  private Button[] buttons;
   void Start() {
-	// Ignore collisions with self.
-	Leap.Utils.IgnoreCollisions(gameObject, gameObject);
 	frame = new Frame ();
 	listener = new LeapListener ();
 	controller = new Leap.Controller(listener); // register the LeapListener
-	player = GameObject.Find("Player") as GameObject;
+    // Ignore collisions with self.
+    Leap.Utils.IgnoreCollisions(gameObject, gameObject);
+    player = GameObject.Find("Player") as GameObject;
+	buttons = UnityEngine.UI.Button.FindObjectsOfType(typeof(Button)) as Button[];	
+	foreach (Button b in buttons) {
+		//Debug.Log (b.name);
+		if(b.name.Equals("Scale")){
+			scale = b;
+		}	
+	}
   }
 
   public override void InitHand() {
@@ -35,32 +47,44 @@ public class SkeletalHand : HandModel {
 
 
   public override void UpdateHand() {
-    SetPositions();
+    SetPositions();	
 		
 	//Debug.Log (left_hand.GetPalmNormal());
 	//Debug.Log (left_hand.GetPalmDirection());
-	Debug.Log ("left");
-	if(player){
-		if (GetPalmNormal().y > 0) {
-			player.GetComponent<Rigidbody>().AddForce (player.transform.forward*20);
-			Debug.Log ("moving forward");
-		}
-		if (GetPalmDirection().x > 0.7f) {
-			player.GetComponent<Rigidbody>().AddTorque (player.transform.up * 1);
-			Debug.Log ("turning right");		
-		}
-		else if (GetPalmDirection().x < -0.5f) {
-			player.GetComponent<Rigidbody>().AddTorque (player.transform.up * -1);
-			Debug.Log ("turning left");	
+	//Debug.Log (GetPalmDirection());
+		
+	if(GetLeapHand().IsLeft){
+		Debug.Log ("left");
+		if(player){
+			if (GetPalmDirection().y > 0.2f) {
+				player.GetComponent<Rigidbody>().AddForce (player.transform.forward*20);
+				Debug.Log ("moving forward");
+			}
+			else if(GetPalmDirection().y < -0.2f){
+				player.GetComponent<Rigidbody>().AddForce (player.transform.forward*-20);
+				Debug.Log ("moving backward");
+			}
+			if (GetPalmDirection().x > 0.4f) {
+				player.GetComponent<Rigidbody>().AddTorque (player.transform.up * 1);
+				Debug.Log ("turning right");		
+			}
+			else if (GetPalmDirection().x < -0.3f) {
+				player.GetComponent<Rigidbody>().AddTorque (player.transform.up * -1);
+				Debug.Log ("turning left");	
+			}
 		}
 	}
 	else if(GetLeapHand().IsRight){
 		Debug.Log ("right");
 		//Debug.Log (player);
+		
 		if(player){
-				
 			CubePlayerController pc = player.GetComponent<CubePlayerController>();
+			int total = pc.itemlist.Count;
+			
 			if(pc.itemlist.Count > 0){
+				if(scale)
+					scale.image.color = Color.red;
 				Debug.Log ("trigger");	
 				pc.itemlist[0].trigger(player);
 			}
