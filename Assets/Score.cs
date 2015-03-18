@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class Score : MonoBehaviour {
-	
 	// Use this for initialization
 	void Start () {
 	
@@ -12,8 +11,11 @@ public class Score : MonoBehaviour {
 	void Update () {
 	
 	}
-	void OnTriggerEnter(){
-		Debug.Log ("score!");
-		gameObject.SetActive(false);
+	void OnTriggerEnter(Collider player){
+		if(player.tag.Equals("Player")){
+			Debug.Log ("score!");
+			CubePlayerController.total_score += 1;
+			gameObject.SetActive(false);
+		}
 	}
 }

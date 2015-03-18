@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class CubePlayerController : MonoBehaviour {
 	public List<IItem> itemlist = new List<IItem>();
 	public SkeletalHand left_hand;
+	public static int total_score = 0;
+	public GameObject text;
 	Rigidbody phisicalBody;
 	float speed = 20.0f;
 	// Use this for initialization
@@ -19,6 +22,7 @@ public class CubePlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		text.GetComponent<Text>().text = "Score: " + total_score;
 		float x = Input.GetAxis("Horizontal") * Time.deltaTime * speed;
 		float y = Input.GetAxis ("Jump") * Time.deltaTime * speed;
 		float z = Input.GetAxis("Vertical") * Time.deltaTime * speed;
