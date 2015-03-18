@@ -6,6 +6,7 @@ public class CubePlayerController : MonoBehaviour {
 	public List<IItem> itemlist = new List<IItem>();
 	public SkeletalHand left_hand;
 	Rigidbody phisicalBody;
+	float speed = 20.0f;
 	// Use this for initialization
 	void Start () {
 		Debug.Log("Initializing player controller...");
@@ -18,8 +19,12 @@ public class CubePlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		float x = Input.GetAxis("Horizontal") * Time.deltaTime * speed;
+		float y = Input.GetAxis ("Jump") * Time.deltaTime * speed;
+		float z = Input.GetAxis("Vertical") * Time.deltaTime * speed;
 		
-		
+		//Debug.Log (x + " " + y + " " + z);
+		transform.Translate(x, y, z);
 		//add resist force
 		//phisicalBody.AddForce (new Vector3(0,1,0));
 
@@ -37,9 +42,10 @@ public class CubePlayerController : MonoBehaviour {
 
 	public bool Move(Vector3 direction)
 	{
-		Debug.Log ("Move being called");
-		phisicalBody.AddForce (direction*20);
-
+		//Debug.Log ("Move being called");
+		//phisicalBody.AddForce (direction*20);
+		transform.Translate(direction);
+		
 		return true;
 	}
 
@@ -47,8 +53,13 @@ public class CubePlayerController : MonoBehaviour {
 	//negative left turn
 	public bool Rotate(float value)
 	{
-		phisicalBody.AddTorque (transform.up * -value);
+		transform.Translate(new Vector3(-value, 0, 0));
+		//phisicalBody.AddTorque (transform.up * -value);
 		return true;
+	}
+	
+	public void Jump(){
+		gameObject.GetComponent<Rigidbody>().AddForce(Vector3.up *100.0f);
 	}
 	
 	public bool Pick(IItem item)
