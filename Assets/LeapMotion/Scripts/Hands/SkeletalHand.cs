@@ -22,6 +22,7 @@ public class SkeletalHand : HandModel {
   protected Frame frame;
   public Button scale;
   public Button jump;
+  public Button restart;
   private Button[] buttons;
   private int button_num;
   private int count = 0;
@@ -39,6 +40,9 @@ public class SkeletalHand : HandModel {
 		}	
 		else if(b.name.Equals("Jump")){
 			jump = b;
+		}
+		else if(b.name.Equals("Restart")){
+			restart = b;
 		}
 		button_num++;
 	}
@@ -141,6 +145,9 @@ public class SkeletalHand : HandModel {
 						}
 					}
 				}
+			}
+			if(restart&&restart.image.color == Color.green){
+				Application.LoadLevel(0);
 			}
 		}
 	}
