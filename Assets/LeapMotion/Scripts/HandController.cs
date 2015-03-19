@@ -266,9 +266,8 @@ public class HandController : MonoBehaviour {
   void FixedUpdate() {
     if (leap_controller_ == null)
       return;
-
+	//Debug.Log ("in fixed update");
     Frame frame = GetFrame();
-
     if (frame.Id != prev_physics_id_)
     {
       UpdateHandModels(hand_physics_, frame.Hands, leftPhysicsModel, rightPhysicsModel);

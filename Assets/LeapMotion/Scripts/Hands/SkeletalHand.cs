@@ -20,15 +20,14 @@ public class SkeletalHand : HandModel {
   public GameObject wristJoint;
   private GameObject player;
   protected Frame frame;
-  public Leap.Controller controller;
-  public LeapListener listener;
   public Button scale;
   public Button jump;
   private Button[] buttons;
+  private int button_num;
+  private int count = 0;
+  private Button current_button;
+  float delay = 0.0f;
   void Start() {
-	frame = new Frame ();
-	listener = new LeapListener ();
-	controller = new Leap.Controller(listener); // register the LeapListener
     // Ignore collisions with self.
     Leap.Utils.IgnoreCollisions(gameObject, gameObject);
     player = GameObject.Find("Player") as GameObject;
@@ -38,6 +37,7 @@ public class SkeletalHand : HandModel {
 		if(b.name.Equals("Scale")){
 			scale = b;
 		}	
+		button_num++;
 	}
   }
 
@@ -48,14 +48,16 @@ public class SkeletalHand : HandModel {
 
   public override void UpdateHand() {
     SetPositions();	
-		
+    delay += Time.deltaTime;
+    Debug.Log("delay is " + delay);
 	//Debug.Log (left_hand.GetPalmNormal());
 	//Debug.Log (left_hand.GetPalmDirection());
 	//Debug.Log (GetPalmDirection());
 		
 	if(GetLeapHand().IsLeft){
-		Debug.Log ("left");
+		//Debug.Log ("left");
 		if(player){
+			
 			if (GetPalmDirection().y > 0.2f) {
 				player.GetComponent<Rigidbody>().AddForce (player.transform.forward*20);
 				Debug.Log ("moving forward");
@@ -75,13 +77,40 @@ public class SkeletalHand : HandModel {
 		}
 	}
 	else if(GetLeapHand().IsRight){
-		Debug.Log ("right");
+		//Debug.Log ("right");
 		//Debug.Log (player);
-		
+		Debug.Log (GetPalmNormal());
 		if(player){
+			if(delay > 2.0f){
+				if(current_button == null || current_button.image.color != Color.green){
+				delay = 0;
+				Debug.Log ("next item");
+				count = (count + 1) % button_num;
+				int local = 0;
+				foreach (Button b in buttons) {
+					if(local == count){
+						b.image.color = Color.red;
+						current_button = b;
+					}
+					else{
+						b.image.color = Color.white;
+					}	
+					local++;
+				}
+				}
+			}
+			if(GetPalmNormal().y > 0){
+				if(current_button != null){
+					current_button.image.color = Color.green;
+				}
+			}	
+			else{
+				if(current_button != null){
+					current_button.image.color = Color.red;
+				}
+			}		
 			CubePlayerController pc = player.GetComponent<CubePlayerController>();
 			int total = pc.itemlist.Count;
-			
 			if(pc.itemlist.Count > 0){
 				if(scale)
 					scale.image.color = Color.red;
@@ -120,48 +149,6 @@ public class SkeletalHand : HandModel {
       forearm.transform.rotation = GetArmRotation();
     }
   }
-
-
-	// inner class LeapListener inheritances Listener
-	public class LeapListener: Listener{
-		// public constructor
-		public LeapListener(){}
-
-		public override void onConnect(Controller controller) {
-			Debug.Log ("on connected");
-			controller.EnableGesture(Gesture.GestureType.TYPECIRCLE,true);
-			controller.EnableGesture(Gesture.GestureType.TYPE_KEY_TAP,true);
-			controller.EnableGesture(Gesture.GestureType.TYPE_SCREEN_TAP,true);
-			controller.EnableGesture(Gesture.GestureType.TYPE_SWIPE,true);
-		}
-
-		public override void OnFrame (Controller controller)
-		{
-			Frame frame = controller.Frame ();
-			GestureList gestures = frame.Gestures();
-			for (int i = 0; i < gestures.Count; i++)
-			{
-				Gesture gesture = gestures[0];
-				switch(gesture.Type){
-				case Gesture.GestureType.TYPECIRCLE:
-					Debug.Log("Circle");
-					break;
-				case Gesture.GestureType.TYPE_KEY_TAP:
-					Debug.Log("key tap");
-					break;
-				case Gesture.GestureType.TYPE_SCREEN_TAP:
-					Debug.Log("screen tap");
-					break;
-				case Gesture.GestureType.TYPE_SWIPE:
-					Debug.Log("swipe");
-					break;
-				default:
-					Debug.Log("Bad gesture type");
-					break;
-				}
-			}
-		}
-	}// end of LeapListener class
 }
 
 
