@@ -32,13 +32,9 @@ public class CubePlayerController : MonoBehaviour {
 		float z = Input.GetAxis("Vertical") * Time.deltaTime * speed;
 		
 		//Debug.Log (x + " " + y + " " + z);
-		//transform.Translate(0, y, z);
+		transform.Translate(x, y, z);
 		//add resist force
 		//phisicalBody.AddForce (new Vector3(0,1,0));
-		Debug.Log (transform.forward);
-		transform.Rotate(0, Time.deltaTime * x * 100 , 0, Space.Self);
-		Debug.Log (transform.forward);
-		
 		
 				
 		phisicalBody.velocity = Vector3.Scale(phisicalBody.velocity ,new Vector3(0.98f , 0.98f, 0.98f));
@@ -80,5 +76,8 @@ public class CubePlayerController : MonoBehaviour {
 		Debug.Log("pick something");
 		itemlist.Add(item);
 		return true;
+	}
+	public void Reset(){
+		gameObject.transform.rotation = Quaternion.identity;
 	}
 }

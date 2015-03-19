@@ -37,6 +37,9 @@ public class SkeletalHand : HandModel {
 		if(b.name.Equals("Scale")){
 			scale = b;
 		}	
+		else if(b.name.Equals("Jump")){
+			jump = b;
+		}
 		button_num++;
 	}
   }
@@ -53,7 +56,11 @@ public class SkeletalHand : HandModel {
 	//Debug.Log (left_hand.GetPalmNormal());
 	//Debug.Log (left_hand.GetPalmDirection());
 	//Debug.Log (GetPalmDirection());
-		
+	if(GetLeapHand() == null){
+			foreach (Button b in buttons) {
+				b.image.color = Color.white;					
+			}
+	}
 	if(GetLeapHand().IsLeft){
 		//Debug.Log ("left");
 		if(player){
@@ -118,11 +125,22 @@ public class SkeletalHand : HandModel {
 			CubePlayerController pc = player.GetComponent<CubePlayerController>();
 			int total = pc.itemlist.Count;
 			if(pc.itemlist.Count > 0){
-				if(scale){
-					scale.image.color = Color.red;
+				Debug.Log ("trigger");
+				if(scale && scale.image.color == Color.green){
+					foreach(IItem i in pc.itemlist){
+						if(i.name.Equals("ScaleItem")){
+							i.trigger(player);
+						}
+					}
+					//pc.itemlist[0].trigger(player);	
+				}	
+				else if(jump && jump.image.color == Color.green) {
+					foreach(IItem i in pc.itemlist){
+						if(i.name.Equals("JumpItem")){
+							i.trigger(player);
+						}
+					}
 				}
-				Debug.Log ("trigger");	
-				pc.itemlist[0].trigger(player);
 			}
 		}
 	}

@@ -9,6 +9,7 @@ public class KeyboardInputInterface : MonoBehaviour {
 	private bool isDdown = false;
 	private bool isSdown = false;
 	private bool isSpaceDown = false;
+	private bool isRDown = false;
 	// Use this for initialization
 	void Start () {
 		ctrl = gameObject.GetComponent<CubePlayerController> ();
@@ -17,6 +18,9 @@ public class KeyboardInputInterface : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		if(Input.GetKeyDown(KeyCode.R)){
+			isRDown = true;
+		}
 		if (Input.GetKeyDown (KeyCode.W)) {
 			isWdown = true;
 		}
@@ -47,6 +51,9 @@ public class KeyboardInputInterface : MonoBehaviour {
 		if(Input.GetKeyUp(KeyCode.Space)){
 			isSpaceDown = false;
 		}
+		if(Input.GetKeyUp(KeyCode.R)){
+			isRDown = false;
+		}
 		UpdatePlayerCtrl ();
 	}
 
@@ -67,6 +74,8 @@ public class KeyboardInputInterface : MonoBehaviour {
 		if(isSpaceDown){
 			ctrl.Jump();
 		}
-
+		if(isRDown){
+			ctrl.Reset();
+		}
 	}
 }
