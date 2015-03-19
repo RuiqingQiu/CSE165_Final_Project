@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ExitBack : MonoBehaviour {
-
+public class Score : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 	
@@ -14,8 +13,9 @@ public class ExitBack : MonoBehaviour {
 	}
 	void OnTriggerEnter(Collider player){
 		if(player.tag.Equals("Player")){
-			player.transform.position = new Vector3(-105, 0, 106);
-			player.transform.rotation = Quaternion.identity;
+			Debug.Log ("score!");
+			CubePlayerController.total_score += 1;
+			gameObject.SetActive(false);
 		}
 	}
 }

@@ -28,6 +28,7 @@ public class SkeletalHand : HandModel {
   private int count = 0;
   private Button current_button;
   float delay = 0.0f;
+  bool selected = false;
   void Start() {
     // Ignore collisions with self.
     Leap.Utils.IgnoreCollisions(gameObject, gameObject);
@@ -55,7 +56,9 @@ public class SkeletalHand : HandModel {
 
   public override void UpdateHand() {
     SetPositions();	
-    delay += Time.deltaTime;
+    if(!selected){
+    	delay += Time.deltaTime;
+    }
     Debug.Log("delay is " + delay);
 	//Debug.Log (left_hand.GetPalmNormal());
 	//Debug.Log (left_hand.GetPalmDirection());
@@ -119,6 +122,7 @@ public class SkeletalHand : HandModel {
 			if(GetPalmNormal().y > 0){
 				if(current_button != null){
 					current_button.image.color = Color.green;
+					selected = true;
 				}
 			}	
 			else{
