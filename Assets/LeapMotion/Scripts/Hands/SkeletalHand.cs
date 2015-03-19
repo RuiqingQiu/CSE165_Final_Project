@@ -58,20 +58,26 @@ public class SkeletalHand : HandModel {
 		//Debug.Log ("left");
 		if(player){
 			
-			if (GetPalmDirection().y > 0.2f) {
-				player.GetComponent<Rigidbody>().AddForce (player.transform.forward*20);
+			if (GetPalmDirection().y > 0.3f) {
+				//player.GetComponent<Rigidbody>().AddForce (player.transform.forward*10000);
+				player.transform.Translate(player.transform.forward);
+				//player.transform.Translate(player.transform.forward);
 				Debug.Log ("moving forward");
 			}
-			else if(GetPalmDirection().y < -0.2f){
-				player.GetComponent<Rigidbody>().AddForce (player.transform.forward*-20);
+			else if(GetPalmDirection().y < -0.3f){
+				player.transform.Translate(-player.transform.forward);
+				//player.GetComponent<Rigidbody>().AddForce (player.transform.forward*-10000);
 				Debug.Log ("moving backward");
 			}
 			if (GetPalmDirection().x > 0.4f) {
-				player.GetComponent<Rigidbody>().AddTorque (player.transform.up * 1);
+				player.transform.Translate(1,0,0);
+				//player.GetComponent<Rigidbody>().AddTorque (player.transform.up * 200);
 				Debug.Log ("turning right");		
 			}
 			else if (GetPalmDirection().x < -0.3f) {
-				player.GetComponent<Rigidbody>().AddTorque (player.transform.up * -1);
+				player.transform.Translate(-1,0,0);
+					
+				//player.GetComponent<Rigidbody>().AddTorque (player.transform.up * -200);
 				Debug.Log ("turning left");	
 			}
 		}
@@ -112,8 +118,9 @@ public class SkeletalHand : HandModel {
 			CubePlayerController pc = player.GetComponent<CubePlayerController>();
 			int total = pc.itemlist.Count;
 			if(pc.itemlist.Count > 0){
-				if(scale)
+				if(scale){
 					scale.image.color = Color.red;
+				}
 				Debug.Log ("trigger");	
 				pc.itemlist[0].trigger(player);
 			}

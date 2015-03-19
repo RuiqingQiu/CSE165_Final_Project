@@ -3,7 +3,7 @@ using System.Collections;
 
 public class JumpItem : IItem{
 	public string name = "JUMP";
-	public float JumpSpeed = 100.0f;
+	public float JumpSpeed = 20000.0f;
 	// Use this for initialization
 	void Start () {
 		
@@ -16,11 +16,11 @@ public class JumpItem : IItem{
 	
 	override public void trigger(GameObject player)
 	{
-		Debug.Log("Trigger Scale");
-		if(player.transform.localScale.magnitude < 1){
-			return;
-		}
-		player.GetComponent<Rigidbody>().AddForce(Vector3.up *JumpSpeed);
+		Debug.Log("Trigger Jump");	
+		float y = JumpSpeed * Time.deltaTime * 0.2f;
+		Debug.Log (y);
+		player.transform.Translate(0, y, 0);
+		//player.GetComponent<Rigidbody>().AddForce(Vector3.up *JumpSpeed);
 	}
 }
 

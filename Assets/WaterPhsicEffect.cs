@@ -17,7 +17,7 @@ public class WaterPhsicEffect : MonoBehaviour {
 		//Destroy(other.gameObject);
 		//Debug.Log("water");
 		if (other.attachedRigidbody){
-			other.attachedRigidbody.AddForce(Vector3.up * 15);        
+			other.attachedRigidbody.AddForce(Vector3.up * 100);        
 		}
 	}
 }
