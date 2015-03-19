@@ -8,7 +8,9 @@ public class CubePlayerController : MonoBehaviour {
 	public SkeletalHand left_hand;
 	public static int total_score = 0;
 	public GameObject text;
+	public GameObject timer_text;
 	Rigidbody phisicalBody;
+	float timer = 0.0f;
 	float speed = 20.0f;
 	// Use this for initialization
 	void Start () {
@@ -22,6 +24,8 @@ public class CubePlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		timer += Time.deltaTime;
+		timer_text.GetComponent<Text>().text = "Timer: " + timer + "s";
 		text.GetComponent<Text>().text = "Score: " + total_score;
 		float x = Input.GetAxis("Horizontal") * Time.deltaTime * speed;
 		float y = Input.GetAxis ("Jump") * Time.deltaTime * speed;
